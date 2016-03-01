@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var c10 = d3.scale.category10();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+function get_coordinates(d, i) {
+    var base = 100;
+    if (d.type == 'ingredient') {
+        delX = 0;
+    }
+    else if (d.type == 'step') {
+        delX = 300;
+    }
+
+    var x = base + delX;
+    var y = base + 50*i;
+
+    return {'x': x, 'y': y};
+}
+
+
+d3.json('demo.json', function(error, graph) {
+    if (error) throw error;
+
+    var links  = svg.selectAll("link")
+        .data(graph.links)
+        .enter()
+        .append("line")
+        .attr("class","link")
+        .attr("x1",function(l){
+            var sourceNode = graph.nodes.filter(function(d,i){ return i==l.source })[0];
+           d3.select(this).attr("y1",sourceNode.y);
+            return sourceNode.x
+        })
+        .attr("x2",function(l){
+            var targetNode = graph.nodes.filter(function(d,i){ return i==l.target })[0];
+             d3.select(this).attr("y2",targetNode.y);
+            return targetNode.x
+        })
+        .attr("fill","none")
+        .attr("stroke", "gray");
+
+    var nodes  = svg.selectAll("node")
+        .data(graph.nodes)
+        .enter()
+        .append("circle")
+        .attr("class","node")
+        .attr("cx",function(d){ return d.x })
+        .attr("cy",function(d){ return d.y })
+        .attr("r",15)
+        .attr("fill", function(d,i){ return c10(i); });
+
+});
+
+</script>

@@ -1,0 +1,81 @@
+{
+    "nodes": [
+        {
+            "title": "wonton wrappers",
+            "quantity": "30x",
+            "type": "ingredient",
+            "id": 0
+        },
+        {
+            "title": "mushrooms",
+            "quantity": "4 cups",
+            "type": "ingredient",
+            "id": 1
+        },
+        {
+            "title": "scallions",
+            "quantity": "3",
+            "type": "ingredient",
+            "id": 2
+        },
+        {
+            "title": "bowl - mix ingredients",
+            "type": "step",
+            "id": 100
+        },
+        {
+            "title": "assemble wontons",
+            "type": "step",
+            "id": 1000
+        },
+        {
+            "title": "cook wontons in broth (5 mins)",
+            "type": "step",
+            "id": 2000
+        },
+        {
+            "title": "chicken broth",
+            "type": "ingredient",
+            "quantity": "5 cups",
+            "id": 3
+        },
+        {
+            "title": "fin.",
+            "type": "step",
+            "id": 9999
+        }
+    ],
+    "links": [
+        {
+            "from_id": 0,
+            "to_id": 1000
+        },
+        {
+            "from_id": 1,
+            "to_id": 100,
+            "text": "clean and dice"
+        },
+        {
+            "from_id": 2,
+            "to_id": 100,
+            "text": "dice"
+        },
+        {
+            "from_id": 100,
+            "to_id": 1000
+        },
+        {
+            "from_id": 1000,
+            "to_id": 2000
+        },
+        {
+            "from_id": 3,
+            "to_id": 2000
+        },
+        {
+            "from_id": 2000,
+            "to_id": 9999,
+            "text": "ready 2 serve!"
+        }
+    ]
+}
