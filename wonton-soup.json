@@ -1,12 +1,6 @@
 {
     "nodes": [
         {
-            "title": "wonton wrappers",
-            "quantity": "30x",
-            "type": "ingredient",
-            "id": 0
-        },
-        {
             "title": "mushrooms",
             "quantity": "4 cups",
             "type": "ingredient",
@@ -19,19 +13,10 @@
             "id": 2
         },
         {
-            "title": "bowl - mix ingredients",
-            "type": "step",
-            "id": 100
-        },
-        {
-            "title": "assemble wontons",
-            "type": "step",
-            "id": 1000
-        },
-        {
-            "title": "cook wontons in broth (5 mins)",
-            "type": "step",
-            "id": 2000
+            "title": "wonton wrappers",
+            "quantity": "30x",
+            "type": "ingredient",
+            "id": 0
         },
         {
             "title": "chicken broth",
@@ -40,8 +25,27 @@
             "id": 3
         },
         {
+            "title": "bowl - mix ingredients",
+            "type": "step",
+            "level": 0,
+            "id": 100
+        },
+        {
+            "title": "assemble wontons",
+            "type": "step",
+            "level": 1,
+            "id": 1000
+        },
+        {
+            "title": "cook wontons in broth (5 mins)",
+            "type": "step",
+            "level": 2,
+            "id": 2000
+        },
+        {
             "title": "fin.",
             "type": "step",
+            "level": 3,
             "id": 9999
         }
     ],
