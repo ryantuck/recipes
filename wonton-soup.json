@@ -4,36 +4,42 @@
             "title": "mushrooms",
             "quantity": "4 cups",
             "type": "ingredient",
+            "img": "mushrooms.png",
             "id": 1
         },
         {
             "title": "scallions",
             "quantity": "3",
             "type": "ingredient",
+            "img": "scallions.png",
             "id": 2
         },
         {
             "title": "wonton wrappers",
             "quantity": "30x",
             "type": "ingredient",
+            "img": "wonton-wrappers.png",
             "id": 0
         },
         {
             "title": "chicken broth",
             "type": "ingredient",
             "quantity": "5 cups",
+            "img": "chicken-broth.png",
             "id": 3
         },
         {
             "title": "sesame oil",
             "type": "ingredient",
             "quantity": "1 Tbsp",
+            "img": "sesame-oil.png",
             "id": 4
         },
         {
             "title": "garlic",
             "type": "ingredient",
             "quantity": "3 cloves",
+            "img": "garlic.png",
             "id": 5
         },
         {
