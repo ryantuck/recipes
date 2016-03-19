@@ -1,6 +1,13 @@
 {
     "nodes": [
         {
+            "title": "wonton wrappers",
+            "quantity": "30x",
+            "type": "ingredient",
+            "img": "wonton-wrappers.png",
+            "id": 0
+        },
+        {
             "title": "mushrooms",
             "quantity": "4 cups",
             "type": "ingredient",
@@ -15,18 +22,11 @@
             "id": 2
         },
         {
-            "title": "wonton wrappers",
-            "quantity": "30x",
+            "title": "garlic",
             "type": "ingredient",
-            "img": "wonton-wrappers.png",
-            "id": 0
-        },
-        {
-            "title": "chicken broth",
-            "type": "ingredient",
-            "quantity": "5 cups",
-            "img": "chicken-broth.png",
-            "id": 3
+            "quantity": "3 cloves",
+            "img": "garlic.png",
+            "id": 5
         },
         {
             "title": "sesame oil",
@@ -36,17 +36,11 @@
             "id": 4
         },
         {
-            "title": "garlic",
+            "title": "chicken broth",
             "type": "ingredient",
-            "quantity": "3 cloves",
-            "img": "garlic.png",
-            "id": 5
-        },
-        {
-            "title": "bowl - mix ingredients",
-            "type": "step",
-            "level": 0,
-            "id": 100
+            "quantity": "5 cups",
+            "img": "chicken-broth.png",
+            "id": 3
         },
         {
             "title": "assemble wontons",
@@ -61,6 +55,18 @@
             "id": 9999
         },
         {
+            "title": "bowl - mix ingredients",
+            "type": "step",
+            "level": 0,
+            "id": 100
+        },
+        {
+            "title": "cook garlic in sesame oil",
+            "type": "step",
+            "level": 0,
+            "id": 101
+        },
+        {
             "title": "cook wontons in broth (5 mins)",
             "type": "step",
             "level": 2,
@@ -71,12 +77,6 @@
             "type": "step",
             "level": 1,
             "id": 102
-        },
-        {
-            "title": "cook garlic in sesame oil",
-            "type": "step",
-            "level": 0,
-            "id": 101
         }
     ],
     "links": [
@@ -86,13 +86,11 @@
         },
         {
             "from_id": 1,
-            "to_id": 100,
-            "text": "clean and dice"
+            "to_id": 100
         },
         {
             "from_id": 2,
-            "to_id": 100,
-            "text": "dice"
+            "to_id": 100
         },
         {
             "from_id": 100,
@@ -112,7 +110,13 @@
         },
         {
             "from_id": 5,
-            "to_id": 101
+            "to_id": 100,
+            "text": "1x"
+        },
+        {
+            "from_id": 5,
+            "to_id": 101,
+            "text": "2x"
         },
         {
             "from_id": 101,

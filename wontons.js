@@ -136,8 +136,8 @@ d3.json('wonton-soup.json', function(error, graph) {
 
     // define text
     step_nodes.append("text")
-            .attr("dy", ".35em")
-            .attr("y", "10")
+        .attr("dy", ".35em")
+        .attr("y", "10")
         .text(function(d) {return d.title;})
         .call(wrap, w_step);
 
@@ -146,6 +146,7 @@ d3.json('wonton-soup.json', function(error, graph) {
     // populate links
     // ------------------------------------------------
 
+    // define vars for both ingredients and steps
     var types = {
         'ingredient': {
             'list': ingredients,
@@ -157,58 +158,72 @@ d3.json('wonton-soup.json', function(error, graph) {
         }
     };
 
-    var links  = svg.selectAll("link")
+    // create links elements
+    var links = svg.selectAll("link")
         .data(graph.links)
         .enter()
-        .append("line")
-        .attr("class", "link")
-        .attr("x1",function(l){
+        .append('g');
 
-            // get starting node
-            var sourceNode = graph
-                .nodes
-                .filter(function(d){
-                    return d.id==l.from_id
-                })[0];
+    links.each(function(d) {
 
-            // determine index of starting node based on its type
-            var i = 0;
-            i = types[sourceNode.type].list.map(function(e) {
-                return e.id;
-            }).indexOf(l.from_id);
+        // get starting node
+        var sourceNode = graph
+            .nodes
+            .filter(function(x){
+                return x.id==d.from_id
+            })[0];
 
+        // get target node
+        var targetNode = graph
+            .nodes
+            .filter(function(x){
+                return x.id==d.to_id
+            })[0];
 
-            // define y coord based on source node and index
-            d3.select(this).attr("y1",function(){
-                return get_coordinates(sourceNode, i).y + h_step/2;
+        // determine index of starting node based on its type
+        var source_i = types[sourceNode.type].list.map(function(e) {
+            return e.id;
+        }).indexOf(d.from_id);
+
+        // determine index of target node based on its type
+        var target_i = types[targetNode.type].list.map(function(e) {
+            return e.id;
+        }).indexOf(d.to_id);
+
+        // determine start and end coordinates of line
+        var ys = get_coordinates(sourceNode, source_i).y + h_step/2;
+        var xs = get_coordinates(sourceNode, source_i).x + types[sourceNode.type].width;
+        var yt = get_coordinates(targetNode, target_i).y + h_step/2;
+        var xt = get_coordinates(targetNode, target_i).x;
+
+        // translate the g element for this line into place
+        var x = Math.min(xs,xt);
+        var y = Math.min(ys,yt);
+        d3.select(this)
+            .attr('transform','translate('+x+','+y+')');
+
+        // append line
+        d3.select(this)
+            .append("line")
+            .attr("class", "link")
+            .attr("x1", xs-x)
+            .attr("y1", ys-y)
+            .attr("x2", xt-x)
+            .attr("y2", yt-y);
+
+        // append text to proper location
+        d3.select(this).append('text')
+            .attr('x', function() {
+                return Math.abs(xs - xt)/2;
+            })
+            .attr('y', function() {
+                return Math.abs(ys - yt)/2;
+            })
+            .attr('dy', ".35em")
+            .text(function(d) {
+                return d.text;
             });
-
-            // define x coord from source node and index
-            return get_coordinates(sourceNode, i).x + types[sourceNode.type].width;
-        })
-        .attr("x2",function(l){
-            // get target node
-            var targetNode = graph
-                .nodes
-                .filter(function(d){
-                    return d.id==l.to_id
-                })[0];
-
-            // determine index of target node based on its type
-            var i = 0;
-            i = types[targetNode.type].list.map(function(e) {
-                return e.id;
-            }).indexOf(l.to_id);
-
-
-            // define y coord based on target node and index
-            d3.select(this).attr("y2",function(){
-                return get_coordinates(targetNode, i).y + h_step/2;
-            });
-
-            // define x coord from target node and index
-            return get_coordinates(targetNode, i).x;
-        });
+    });
 });
 
 
