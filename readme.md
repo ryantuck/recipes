@@ -8,5 +8,7 @@ completed.
 
 once i accomplish that, then i can start baking in timing into the data model for the recipe. that can help determine the x coordinate (as a first pass) for the next step in the process.
 
+ideally, the javascript should parse the steps in the json and determine how many separate 'columns' should be generated. for instance, if two steps don't have any derived parent/child dependencies, they can be thrown in the same column.
+
 
 

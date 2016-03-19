@@ -25,6 +25,18 @@
             "id": 3
         },
         {
+            "title": "sesame oil",
+            "type": "ingredient",
+            "quantity": "1 Tbsp",
+            "id": 4
+        },
+        {
+            "title": "garlic",
+            "type": "ingredient",
+            "quantity": "3 cloves",
+            "id": 5
+        },
+        {
             "title": "bowl - mix ingredients",
             "type": "step",
             "level": 0,
@@ -37,16 +49,28 @@
             "id": 1000
         },
         {
+            "title": "fin.",
+            "type": "step",
+            "level": 3,
+            "id": 9999
+        },
+        {
             "title": "cook wontons in broth (5 mins)",
             "type": "step",
             "level": 2,
             "id": 2000
         },
         {
-            "title": "fin.",
+            "title": "add broth to pot",
             "type": "step",
-            "level": 3,
-            "id": 9999
+            "level": 1,
+            "id": 102
+        },
+        {
+            "title": "cook garlic in sesame oil",
+            "type": "step",
+            "level": 0,
+            "id": 101
         }
     ],
     "links": [
@@ -74,6 +98,22 @@
         },
         {
             "from_id": 3,
+            "to_id": 2000
+        },
+        {
+            "from_id": 4,
+            "to_id": 101
+        },
+        {
+            "from_id": 5,
+            "to_id": 101
+        },
+        {
+            "from_id": 101,
+            "to_id": 102
+        },
+        {
+            "from_id": 102,
             "to_id": 2000
         },
         {

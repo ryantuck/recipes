@@ -1,94 +1,187 @@
 
-
-var width = 960,
+// window dimensions
+var width = 1200,
     height = 800;
 
+// rect dimensions
+var w_rect = 160,
+    h_rect = 60;
+
+// spacing between nodes
+var x_spacing = 200,
+    y_spacing = 80;
+
+// margin around content
+var margin = 100;
+
+// set color palette
 var c10 = d3.scale.category10();
 
+// create main svg body
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+// given node and its index, compute coordinates
 function get_coordinates(d, i) {
-    var base = 100;
+
+    var base = margin;
+
     if (d.type == 'ingredient') {
+        // first col
         delX = 0;
     }
     else if (d.type == 'step') {
-        delX = 200 + 120 * d.level;
+        delX = x_spacing * (1 + d.level);
     }
 
-    var x = base + delX;
-    var y = base + 50*i;
-
-    return {'x': x, 'y': y};
+    return {
+        'x': base + delX,
+        'y': base + y_spacing*i
+    };
 }
 
-
+// read in json and position nodes and edges accordingly!
 d3.json('wonton-soup.json', function(error, graph) {
     if (error) throw error;
 
-    var ingredients = graph.nodes.filter(function(d) { return d.type == 'ingredient'});
-    var steps = graph.nodes.filter(function(d) { return d.type == 'step'});
+    // ------------------------------------------------
+    // parse node data
+    // ------------------------------------------------
 
+    // get unique list of ingredients
+    var ingredients = graph
+        .nodes
+        .filter(function(d) {
+            return d.type == 'ingredient'
+        });
+
+    // get unique list of steps
+    var steps = graph
+        .nodes
+        .filter(function(d) {
+            return d.type == 'step'
+        });
+
+
+    // ------------------------------------------------
+    // position and populate ingredient nodes
+    // ------------------------------------------------
+
+    // define positions
     var ingredient_nodes  = svg.selectAll("node")
         .data(ingredients)
         .enter()
-        .append("rect")
-        .attr("class","node")
-        .attr("x",function(d,i) {return get_coordinates(d,i).x;})
-        .attr("y",function(d,i) {return get_coordinates(d,i).y;})
-        .attr("width",100)
-        .attr("height",50)
-        .attr("fill", function(d,i){ return c10(i); })
-        .append("text")
-        .attr("text", function(d) {return d.title;});
+        .append("g")
+        .attr("transform", function(d, i) {
+            var c = get_coordinates(d,i);
+            return "translate(" + c.x + "," + c.y + ")";
+        });
 
+    // define rectangles
+    ingredient_nodes.append("rect")
+        .attr("class", "node")
+        .attr("width", w_rect)
+        .attr("height", h_rect)
+        .attr("fill", function(d,i){ return c10(i); });
+
+    // define text
+    ingredient_nodes.append("text")
+        .attr("dy", ".35em")
+        .attr("y", "10")
+        .text(function(d) { return d.title; });
+
+    // ------------------------------------------------
+    // position and populate step nodes
+    // ------------------------------------------------
+
+    // define positions
     var step_nodes  = svg.selectAll(".asdf")
         .data(steps)
         .enter()
-        .append("rect")
-        .attr("class","asdf")
-        .attr("x",function(d,i) {return get_coordinates(d,i).x;})
-        .attr("y",function(d,i) {return get_coordinates(d,i).y;})
-        .attr("width",100)
-        .attr("height",50)
+        .append("g")
+        .attr("transform", function(d, i) {
+            var c = get_coordinates(d,i);
+            return "translate(" + c.x + "," + c.y + ")";
+        });
+
+    // define rectanges
+    step_nodes.append("rect")
+        .attr("class", "asdf")
+        .attr("width", w_rect)
+        .attr("height", h_rect)
         .attr("fill", function(d,i){ return c10(i); });
+
+    // define text
+    step_nodes.append("text")
+            .attr("dy", ".35em")
+            .attr("y", "10")
+        .text(function(d) {return d.title;});
+
+
+    // ------------------------------------------------
+    // populate links
+    // ------------------------------------------------
 
     var links  = svg.selectAll("link")
         .data(graph.links)
         .enter()
         .append("line")
-        .attr("class","link")
+        .attr("class", "link")
         .attr("x1",function(l){
-            var sourceNode = graph.nodes.filter(function(d){ return d.id==l.from_id })[0];
-            var i = 0;
-            if (sourceNode.type == 'ingredient') {
-                i = ingredients.map(function(e) {return e.id}).indexOf(l.from_id);
-            } else if (sourceNode.type == 'step') {
-                i = steps.map(function(e) {return e.id}).indexOf(l.from_id);
-            }
-            console.log(sourceNode);
-            console.log(get_coordinates(sourceNode,i));
-            d3.select(this).attr("y1",function(){ return get_coordinates(sourceNode,i).y});
 
-            return get_coordinates(sourceNode,i).x;
+            // get starting node
+            var sourceNode = graph
+                .nodes
+                .filter(function(d){
+                    return d.id==l.from_id
+                })[0];
+
+            // determine index of starting node based on its type
+            var i = 0;
+            var lists = {
+                'ingredient': ingredients,
+                'step': steps
+            };
+            i = lists[sourceNode.type].map(function(e) {
+                return e.id;
+            }).indexOf(l.from_id);
+
+
+            // define y coord based on source node and index
+            d3.select(this).attr("y1",function(){
+                return get_coordinates(sourceNode, i).y + h_rect/2;
+            });
+
+            // define x coord from source node and index
+            return get_coordinates(sourceNode, i).x + w_rect;
         })
         .attr("x2",function(l){
-            var targetNode = graph.nodes.filter(function(d){ return d.id==l.to_id })[0];
-            var i = 0;
-            if (targetNode.type == 'ingredient') {
-                i = ingredients.map(function(e) {return e.id}).indexOf(l.to_id);
-            } else if (targetNode.type == 'step') {
-                i = steps.map(function(e) {return e.id}).indexOf(l.to_id);
-            }
-            console.log(targetNode);
-            console.log(get_coordinates(targetNode,i));
-            d3.select(this).attr("y2",function(){ return get_coordinates(targetNode,i).y});
-            return get_coordinates(targetNode, i).x;
-        })
-        .attr("fill","green")
-        .attr("stroke", "gray");
+            // get target node
+            var targetNode = graph
+                .nodes
+                .filter(function(d){
+                    return d.id==l.to_id
+                })[0];
 
+            // determine index of target node based on its type
+            var i = 0;
+            var lists = {
+                'ingredient': ingredients,
+                'step': steps
+            };
+            i = lists[targetNode.type].map(function(e) {
+                return e.id;
+            }).indexOf(l.to_id);
+
+
+            // define y coord based on target node and index
+            d3.select(this).attr("y2",function(){
+                return get_coordinates(targetNode, i).y + h_rect/2;
+            });
+
+            // define x coord from target node and index
+            return get_coordinates(targetNode, i).x;
+        });
 });
 
