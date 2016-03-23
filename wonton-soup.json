@@ -45,38 +45,80 @@
         {
             "title": "assemble wontons",
             "type": "step",
-            "level": 1,
-            "id": 1000
+            "level": 2,
+            "id": 1000,
+            "row": 2,
+            "img": "mix.png"
         },
         {
             "title": "fin.",
             "type": "step",
-            "level": 3,
-            "id": 9999
+            "level": 4,
+            "id": 9999,
+            "row": 3,
+            "img": "complete.png"
         },
         {
             "title": "bowl - mix ingredients",
             "type": "step",
-            "level": 0,
-            "id": 100
+            "level": 1,
+            "id": 100,
+            "row": 2,
+            "img": "mix.png"
         },
         {
-            "title": "cook garlic in sesame oil",
+            "title": "clean and dice mushrooms",
             "type": "step",
             "level": 0,
-            "id": 101
+            "id": 300,
+            "row": 1,
+            "step_type": "prep",
+            "img": "knife.jpg"
+        },
+        {
+            "title": "dice scallions",
+            "type": "step",
+            "level": 0,
+            "id": 301,
+            "row": 2,
+            "step_type": "prep",
+            "img": "knife.jpg"
+        },
+        {
+            "title": "mince garlic",
+            "type": "step",
+            "level": 0,
+            "id": 302,
+            "row": 3,
+            "step_type": "prep",
+            "img": "knife.jpg"
         },
         {
             "title": "cook wontons in broth (5 mins)",
             "type": "step",
-            "level": 2,
-            "id": 2000
+            "level": 3,
+            "id": 2000,
+            "row": 3,
+            "step_type": "cook",
+            "img": "pot.png"
+        },
+        {
+            "title": "cook garlic in sesame oil",
+            "type": "step",
+            "level": 1,
+            "id": 101,
+            "row": 4,
+            "step_type": "cook",
+            "img": "pot.png"
         },
         {
             "title": "add broth to pot",
             "type": "step",
-            "level": 1,
-            "id": 102
+            "level": 2,
+            "id": 102,
+            "row": 4,
+            "step_type": "cook",
+            "img": "pot.png"
         }
     ],
     "links": [
@@ -86,10 +128,22 @@
         },
         {
             "from_id": 1,
-            "to_id": 100
+            "to_id": 300
         },
         {
             "from_id": 2,
+            "to_id": 301
+        },
+        {
+            "from_id": 5,
+            "to_id": 302
+        },
+        {
+            "from_id": 300,
+            "to_id": 100
+        },
+        {
+            "from_id": 301,
             "to_id": 100
         },
         {
@@ -109,12 +163,12 @@
             "to_id": 101
         },
         {
-            "from_id": 5,
+            "from_id": 302,
             "to_id": 100,
             "text": "1x"
         },
         {
-            "from_id": 5,
+            "from_id": 302,
             "to_id": 101,
             "text": "2x"
         },
@@ -128,8 +182,7 @@
         },
         {
             "from_id": 2000,
-            "to_id": 9999,
-            "text": "ready 2 serve!"
+            "to_id": 9999
         }
     ]
 }

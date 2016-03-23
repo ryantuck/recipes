@@ -1,10 +1,10 @@
 
 // window dimensions
-var width = 1200,
-    height = 800;
+var width = 1600,
+    height = 1200;
 
 // rect dimensions
-var w_step = 160,
+var w_step = 200,
     h_step = 60;
 
 // rect dimensions
@@ -26,28 +26,31 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-// given node and its index, compute coordinates
-function get_coordinates(d, i) {
-
-    var base = margin;
-
-    if (d.type == 'ingredient') {
-        // first col
-        delX = 0;
-    }
-    else if (d.type == 'step') {
-        delX = w_ingredient + x_spacing * (d.level+1) + w_step * (d.level);
-    }
-
-    return {
-        'x': base + delX,
-        'y': base + (h_ingredient + y_spacing)*i
-    };
-}
 
 // read in json and position nodes and edges accordingly!
 d3.json('wonton-soup.json', function(error, graph) {
     if (error) throw error;
+
+    // given node and its index, compute coordinates
+    function get_coordinates(d, i) {
+
+        var base = margin;
+
+        if (d.type == 'ingredient') {
+            // first col
+            delX = 0;
+            delY = (h_ingredient + y_spacing)*i;
+        }
+        else if (d.type == 'step') {
+            delX = w_ingredient + x_spacing * (d.level+1) + w_step * (d.level);
+            delY = (h_ingredient + y_spacing)*d.row;
+        }
+
+        return {
+            'x': base + delX,
+            'y': base + delY
+        };
+    }
 
     // ------------------------------------------------
     // parse node data
@@ -66,6 +69,14 @@ d3.json('wonton-soup.json', function(error, graph) {
         .filter(function(d) {
             return d.type == 'step'
         });
+
+    var step_levels = [5];
+    for (var i=0; i<5; i++) {
+        step_levels[i] = steps.filter(function(d) {
+            return d.level == i;
+        });
+    }
+    console.log(step_levels);
 
 
     // ------------------------------------------------
@@ -118,28 +129,42 @@ d3.json('wonton-soup.json', function(error, graph) {
     // ------------------------------------------------
 
     // define positions
-    var step_nodes  = svg.selectAll(".asdf")
-        .data(steps)
-        .enter()
-        .append("g")
-        .attr("transform", function(d, i) {
-            var c = get_coordinates(d,i);
-            return "translate(" + c.x + "," + c.y + ")";
-        });
+    for (var j=0; j<5; j++) {
+        console.log(step_levels[j]);
 
-    // define rectanges
-    step_nodes.append("rect")
-        .attr("class", "asdf")
-        .attr("width", w_step)
-        .attr("height", h_step)
-        .attr("fill", function(d,i){ return "white"; });
+        var step_nodes  = svg.selectAll(".asdf" + j)
+            .data(step_levels[j])
+            .enter()
+            .append("g")
+            .attr("transform", function(d, i) {
+                var c = get_coordinates(d,i);
+                console.log(c);
+                return "translate(" + c.x + "," + c.y + ")";
+            });
 
-    // define text
-    step_nodes.append("text")
-        .attr("dy", ".35em")
-        .attr("y", "10")
-        .text(function(d) {return d.title;})
-        .call(wrap, w_step);
+        // define rectanges
+        step_nodes.append("rect")
+            .attr("class", "asdf")
+            .attr("width", w_step)
+            .attr("height", h_step)
+            .attr("fill", function(d,i){ return "white"; });
+
+        // define text
+        step_nodes.append("text")
+            .attr("dy", ".35em")
+            .attr("y", "10")
+            .attr('transform','translate(65,0)')
+            .text(function(d) {return d.title;})
+            .call(wrap, w_step-65);
+
+        // append images
+        step_nodes.append('svg:image')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 60)
+            .attr('height', 60)
+            .attr('xlink:href', function(d) { return 'img/' + d.img;});
+    }
 
 
     // ------------------------------------------------
@@ -181,12 +206,19 @@ d3.json('wonton-soup.json', function(error, graph) {
             })[0];
 
         // determine index of starting node based on its type
-        var source_i = types[sourceNode.type].list.map(function(e) {
-            return e.id;
-        }).indexOf(d.from_id);
+        if (sourceNode.type == 'step') {
+            var source_i = step_levels[sourceNode.level].map(function(e) {
+                return e.id;
+            }).indexOf(d.from_id);
+        } else {
+            var source_i = types[sourceNode.type].list.map(function(e) {
+                return e.id;
+            }).indexOf(d.from_id);
+        }
 
         // determine index of target node based on its type
-        var target_i = types[targetNode.type].list.map(function(e) {
+        var target_level = targetNode.level;
+        var target_i = step_levels[target_level].map(function(e) {
             return e.id;
         }).indexOf(d.to_id);
 
